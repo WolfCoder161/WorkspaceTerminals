@@ -1,4 +1,4 @@
-![Workspace Terminals Logo]([src/assets/WorkspaceTerminalsLogo.png](src/assets/WorkspaceTerminalsLogo.png))
+![Workspace Terminals Logo](https://raw.githubusercontent.com/WolfCoder161/WorkspaceTerminals/refs/heads/main/src/assets/WorkspaceTerminalsLogo.png)
 
 # Workspace Terminals
 

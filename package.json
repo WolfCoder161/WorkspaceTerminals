@@ -2,7 +2,7 @@
   "name": "workspace-terminals",
   "displayName": "Workspace Terminals",
   "description": "Visual Studio Code extension that automatically opens customizable integrated terminals based on workspace-specific configurations.",
-  "icon": "src/assets/WorkspaceTerminalsLogo.png",
+  "icon": "WorkspaceTerminalsLogo.png",
   "author": {
     "name": "WolfCoder161",
     "url": "https://github.com/WolfCoder161"
