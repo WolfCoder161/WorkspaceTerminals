@@ -2,8 +2,15 @@
   "name": "workspace-terminals",
   "displayName": "Workspace Terminals",
   "description": "Visual Studio Code extension that automatically opens customizable integrated terminals based on workspace-specific configurations.",
-  "icon": "./src/assets/WorkspaceTerminalsLogo.png",
-  "author": {"name": "WolfCoder161", "url": "https://github.com/WolfCoder161"},
+  "icon": "src/assets/WorkspaceTerminalsLogo.png",
+  "author": {
+    "name": "WolfCoder161",
+    "url": "https://github.com/WolfCoder161"
+  },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/WolfCoder161/WorkspaceTerminals"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.100.0"
@@ -32,79 +39,86 @@
         }
       }
     },
-    "configuration":{
-        "title": "Workspace Terminals",
-        "properties": {
-          "workspaceTerminals.terminals":{
-            "type":"array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "Display name of the terminal tab."
-                },
-                "icon":{
-                  "type": "string",
-                  "description": "Icon name for the terminal tab (refer to https://code.visualstudio.com/api/references/icons-in-labels)."
-                },
-                "color":{
-                  "type": "string",
-                  "description": "Theme color ID for the terminal tab."
-                },
-                "workingDir":{
-                  "type": "string",
-                  "description": "Working Directory for the terminal (relative to workspace root or absolute path)."
-                },
-                "shellPath":{
-                  "type": "string",
-                  "description": "Shell executable path or command."
-                },
-                "shellArgs":{
-                  "type": "array",
-                  "description": "Arguments for the shell executable.",
-                  "items": {
-                    "type": "string"
-                  }
-                }
+    "configuration": {
+      "title": "Workspace Terminals",
+      "properties": {
+        "workspaceTerminals.terminals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Display name of the terminal tab."
               },
-              "required": ["name", "workingDir", "shellPath"]
-            }
-          },
-          "workspaceTerminals.activityBarButton":{
-            "type": "boolean",
-            "default": false,
-            "markdownDescription": "If set, adds a Launch Terminals button to the Activity Bar. (Note: To see a change a window refresh will be needed. Run `Developer Window: Refresh` from the Command Palette.)"
-          },
-          "workspaceTerminals.activityBarButtonPosition":{
-            "type": "string",
-            "enum": ["left", "right"],
-            "default": "right",
-            "description": "Sets the position of the Activity Bar Button."
-          },
-          "workspaceTerminals.terminalTabPaneButton":{
-            "type": "boolean",
-            "default": true,
-            "description": "If set, adds a Launch Terminals button to the Terminal Tab Pane."
+              "icon": {
+                "type": "string",
+                "description": "Icon name for the terminal tab (refer to https://code.visualstudio.com/api/references/icons-in-labels)."
+              },
+              "color": {
+                "type": "string",
+                "description": "Theme color ID for the terminal tab."
+              },
+              "workingDir": {
+                "type": "string",
+                "description": "Working Directory for the terminal (relative to workspace root or absolute path)."
+              },
+              "shellPath": {
+                "type": "string",
+                "description": "Shell executable path or command."
+              },
+              "shellArgs": {
+                "type": "array",
+                "description": "Arguments for the shell executable.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "workingDir",
+              "shellPath"
+            ]
           }
+        },
+        "workspaceTerminals.activityBarButton": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "If set, adds a Launch Terminals button to the Activity Bar. (Note: To see a change a window refresh will be needed. Run `Developer Window: Refresh` from the Command Palette.)"
+        },
+        "workspaceTerminals.activityBarButtonPosition": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right"
+          ],
+          "default": "right",
+          "description": "Sets the position of the Activity Bar Button."
+        },
+        "workspaceTerminals.terminalTabPaneButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "If set, adds a Launch Terminals button to the Terminal Tab Pane."
         }
-      },
-      "commands":[
+      }
+    },
+    "commands": [
+      {
+        "command": "workspaceTerminals.launchTerminals",
+        "title": "Workspace Terminals: Launch Terminals",
+        "icon": "$(workplace-terminals-icon-2)"
+      }
+    ],
+    "menus": {
+      "view/title": [
         {
           "command": "workspaceTerminals.launchTerminals",
-          "title": "Workspace Terminals: Launch Terminals",
-          "icon": "$(workplace-terminals-icon-2)"
+          "when": "view == terminal && config.workspaceTerminals.terminalTabPaneButton",
+          "group": "navigation"
         }
-      ],
-      "menus": {
-        "view/title": [
-          {
-            "command": "workspaceTerminals.launchTerminals",
-            "when": "view == terminal && config.workspaceTerminals.terminalTabPaneButton",
-            "group": "navigation"
-          }
-        ]
-      }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -121,16 +135,17 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.100.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.100.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.25.3",
+    "eslint": "^9.25.1",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.8.3",
-    "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "vsce": "^2.15.0"
   }
 }

@@ -1,4 +1,4 @@
-![Workspace Terminals Logo](./src/assets/WorkspaceTerminalsLogo.png)
+![Workspace Terminals Logo]([src/assets/WorkspaceTerminalsLogo.png](src/assets/WorkspaceTerminalsLogo.png))
 
 # Workspace Terminals
 
