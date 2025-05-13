@@ -27,6 +27,35 @@ function fetchActivityBarConfig(): ActivityBarButtonConfig {
 	return { display, position };
 }
 
+function infoNotification(text: string) {
+	vscode.window.showInformationMessage("Workspace Terminals: " + text);
+}
+function warnNotification(text: string) {
+	vscode.window.showInformationMessage("Workspace Terminals: " + text);
+}
+function errorNotification(text: string) {
+	vscode.window.showErrorMessage("Workspace Terminals: " + text);
+}
+
+function missingRequiredPropertyNotification(configIndex: number, propertyName: string) {
+	errorNotification(`Terminal configuration ${configIndex} is missing \'${propertyName}\' (a required parameter). Add ${propertyName} to \'workspaceTerminals.terminals[${configIndex - 1}]\'`);
+}
+
+function validTerminalConfig(config: TerminalConfig, configIndex: number) {
+	// Check for required configs
+	let noErrorsFound = true;
+	if (config) {
+		if (!config.name) { missingRequiredPropertyNotification(configIndex, "name"); noErrorsFound = false; };
+		if (!config.workingDir) { missingRequiredPropertyNotification(configIndex, "workingDir"); noErrorsFound = false; };
+		if (!config.shellPath) { missingRequiredPropertyNotification(configIndex, "shellPath"); noErrorsFound = false; };
+	} 
+	// else {
+	// 	warnNotification(`Terminal configuration ${configIndex} is empty. Skipping...`);
+	// }
+
+	return noErrorsFound;
+}
+
 function resolveWorkingDir(workingDir: string): string | undefined {
 	if (!workingDir) { return undefined; }
 	if (path.isAbsolute(workingDir)) { return workingDir; }
@@ -35,7 +64,7 @@ function resolveWorkingDir(workingDir: string): string | undefined {
 	if (!workspaceFolders) { return undefined; }
 
 	const matchingFolder = workspaceFolders.find(folder => folder.name === workingDir);
-	
+
 	if (matchingFolder) { return matchingFolder.uri.fsPath; }
 
 	return path.join(workspaceFolders[0].uri.fsPath, workingDir);
@@ -62,36 +91,40 @@ function createTerminal(config: TerminalConfig): void {
 function launchTerminals(manuallyInvoked: boolean = false): void {
 	const configs = fetchTerminalConfig();
 
-	if (!vscode.workspace.workspaceFolders || configs.length === 0){
-		if (manuallyInvoked){
-			vscode.window.showWarningMessage('Workspace Terminals: No Workspace Terminals configurations found.');
+
+	if (!vscode.workspace.workspaceFolders || configs.length === 0) {
+		if (manuallyInvoked) {
+			warnNotification('No Workspace Terminals configurations found.');
 		}
 		return;
 
 	}
 
-	
-
-		
-		let terminalsOpened = 0;
-		for (const config of configs) {
+	let terminalsOpened = 0;
+	configs.forEach((config, index) => {
+		let validConfig = validTerminalConfig(config, index + 1);
+		if (validConfig) {
 			if (!isTerminalOpen(config.name)) {
 				createTerminal(config);
 				terminalsOpened += 1;
 			}
 		}
+	});
 
-		if (configs.length > 0 && terminalsOpened === 0) {
-			vscode.window.showInformationMessage('Workspace Terminals: All workspace terminals are already open.');
-		}
-		else if (terminalsOpened >= 0) {
-			vscode.window.showInformationMessage(`Workspace Terminals: Opened ${terminalsOpened} terminal${terminalsOpened === 1 ? '' : 's'}.`);
-		}
+
+	if (configs.length > 0 && terminalsOpened === 0) {
+		infoNotification('All workspace terminals are already open.');
+	} else if (manuallyInvoked && terminalsOpened >= 0) {
+		infoNotification(`Reopened workspace terminals. ${terminalsOpened} reopened.`);
 	}
+	else if (terminalsOpened >= 0) {
+		infoNotification(`Opened ${terminalsOpened} terminal${terminalsOpened === 1 ? '' : 's'}.`);
+	}
+}
 
-	
 
-	
+
+
 
 
 

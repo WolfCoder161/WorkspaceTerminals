@@ -27,14 +27,14 @@
       "workplace-terminals-icon-1": {
         "description": "Workplace Terminal Launcher",
         "default": {
-          "fontPath": "./src/assets/workspaceTerminalsIcons.woff",
+          "fontPath": "workspaceTerminalsIcons.woff",
           "fontCharacter": "\\E800"
         }
       },
       "workplace-terminals-icon-2": {
         "description": "Workplace Terminal Launcher",
         "default": {
-          "fontPath": "./src/assets/workspaceTerminalsIcons.woff",
+          "fontPath": "workspaceTerminalsIcons.woff",
           "fontCharacter": "\\E801"
         }
       }
